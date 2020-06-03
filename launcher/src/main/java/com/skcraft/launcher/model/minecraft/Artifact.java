@@ -10,6 +10,14 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Artifact {
 
-    private String path;
-    private String url;
+    protected String path;
+    protected String url;
+		
+	protected Artifact(){};
+	
+	protected Artifact(String path, String url)
+	{
+		this.path = path;
+		this.url = url;
+	};
 }

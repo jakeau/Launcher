@@ -33,6 +33,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
+import java.util.ArrayList;
 import java.io.*;
 import java.net.URL;
 import java.util.LinkedHashSet;
@@ -159,7 +160,17 @@ public class PackageBuilder {
                 VersionManifest version = manifest.getVersionManifest();
 
                 // Copy tweak class arguments
-                String args = profile.getVersionInfo().getMinecraftArguments();
+				String args = null;
+				
+				if(profile.getVersionInfo() == null)
+				{
+					args = "--launchTarget fmlclient --fml.forgeVersion 28.2.0 --fml.mcVersion 1.14.4 --fml.forgeGroup net.minecraftforge --fml.mcpVersion 20190829.143755";
+				}
+				else
+				{
+					args = profile.getVersionInfo().getMinecraftArguments();
+				}
+				
                 if (args != null) {
                     String existingArgs = Strings.nullToEmpty(version.getMinecraftArguments());
 
@@ -171,7 +182,102 @@ public class PackageBuilder {
                 }
 
                 // Add libraries
-                List<Library> libraries = profile.getVersionInfo().getLibraries();
+				
+				List<Library> libraries = null;
+				
+				if(profile.getVersionInfo() == null)
+				{
+					List<Library> temp_libs = new ArrayList<Library>();
+
+					temp_libs.add(new Library("net.minecraftforge:forge:1.14.4-28.2.0", 
+						"net/minecraftforge/forge/1.14.4-28.2.0/forge-1.14.4-28.2.0.jar",
+						null));
+
+					temp_libs.add(new Library("org.ow2.asm:asm:6.2", 
+						"org/ow2/asm/asm/6.2/asm-6.2.jar",
+						"https://files.minecraftforge.net/maven/org/ow2/asm/asm/6.2/asm-6.2.jar"));
+						
+					temp_libs.add(new Library("org.ow2.asm:asm-commons:6.2", 
+						"org/ow2/asm/asm-commons/6.2/asm-commons-6.2.jar",
+						"https://files.minecraftforge.net/maven/org/ow2/asm/asm-commons/6.2/asm-commons-6.2.jar"));
+						
+					temp_libs.add(new Library("org.ow2.asm:asm-tree:6.2", 
+						"org/ow2/asm/asm-tree/6.2/asm-tree-6.2.jar",
+						"https://files.minecraftforge.net/maven/org/ow2/asm/asm-tree/6.2/asm-tree-6.2.jar"));
+
+					temp_libs.add(new Library("cpw.mods:modlauncher:4.1.0", 
+						"cpw/mods/modlauncher/4.1.0/modlauncher-4.1.0.jar",
+						"https://files.minecraftforge.net/maven/cpw/mods/modlauncher/4.1.0/modlauncher-4.1.0.jar"));
+
+					temp_libs.add(new Library("cpw.mods:grossjava9hacks:1.1.0", 
+						"cpw/mods/grossjava9hacks/1.1.0/grossjava9hacks-1.1.0.jar",
+						"https://files.minecraftforge.net/maven/cpw/mods/grossjava9hacks/1.1.0/grossjava9hacks-1.1.0.jar"));
+
+					temp_libs.add(new Library("net.minecraftforge:accesstransformers:1.0.1-milestone.0.1+94458e7-shadowed", 
+						"net/minecraftforge/accesstransformers/1.0.1-milestone.0.1+94458e7-shadowed/accesstransformers-1.0.1-milestone.0.1+94458e7-shadowed.jar",
+						"https://files.minecraftforge.net/maven/net/minecraftforge/accesstransformers/1.0.1-milestone.0.1+94458e7/accesstransformers-1.0.1-milestone.0.1+94458e7-shadowed.jar"));
+
+					temp_libs.add(new Library("net.minecraftforge:eventbus:1.0.0-service", 
+						"net/minecraftforge/eventbus/1.0.0-service/eventbus-1.0.0-service.jar",
+						"https://files.minecraftforge.net/maven/net/minecraftforge/eventbus/1.0.0/eventbus-1.0.0-service.jar"));
+
+					temp_libs.add(new Library("net.minecraftforge:forgespi:1.5.0", 
+						"net/minecraftforge/forgespi/1.5.0/forgespi-1.5.0.jar",
+						"https://files.minecraftforge.net/maven/net/minecraftforge/forgespi/1.5.0/forgespi-1.5.0.jar"));
+
+					temp_libs.add(new Library("net.minecraftforge:coremods:1.0.0", 
+						"net/minecraftforge/coremods/1.0.0/coremods-1.0.0.jar",
+						"https://files.minecraftforge.net/maven/net/minecraftforge/coremods/1.0.0/coremods-1.0.0.jar"));
+
+					temp_libs.add(new Library("net.minecraftforge:unsafe:0.2.0", 
+						"net/minecraftforge/unsafe/0.2.0/unsafe-0.2.0.jar",
+						"https://files.minecraftforge.net/maven/net/minecraftforge/unsafe/0.2.0/unsafe-0.2.0.jar"));
+
+					temp_libs.add(new Library("com.electronwill.night-config:core:3.6.0", 
+						"com/electronwill/night-config/core/3.6.0/core-3.6.0.jar",
+						"https://files.minecraftforge.net/maven/com/electronwill/night-config/core/3.6.0/core-3.6.0.jar"));
+
+					temp_libs.add(new Library("com.electronwill.night-config:toml:3.6.0", 
+						"com/electronwill/night-config/toml/3.6.0/toml-3.6.0.jar",
+						"https://files.minecraftforge.net/maven/com/electronwill/night-config/toml/3.6.0/toml-3.6.0.jar"));
+
+					temp_libs.add(new Library("org.jline:jline:3.12.1", 
+						"org/jline/jline/3.12.1/jline-3.12.1.jar",
+						"https://files.minecraftforge.net/maven/org/jline/jline/3.12.1/jline-3.12.1.jar"));
+
+					temp_libs.add(new Library("org.apache.maven:maven-artifact:3.6.0", 
+						"org/apache/maven/maven-artifact/3.6.0/maven-artifact-3.6.0.jar",
+						"https://files.minecraftforge.net/maven/org/apache/maven/maven-artifact/3.6.0/maven-artifact-3.6.0.jar"));
+
+					temp_libs.add(new Library("net.jodah:typetools:0.6.0", 
+						"net/jodah/typetools/0.6.0/typetools-0.6.0.jar",
+						"https://files.minecraftforge.net/maven/net/jodah/typetools/0.6.0/typetools-0.6.0.jar"));
+
+					temp_libs.add(new Library("java3d:vecmath:1.5.2", 
+						"java3d/vecmath/1.5.2/vecmath-1.5.2.jar",
+						"https://libraries.minecraft.net/java3d/vecmath/1.5.2/vecmath-1.5.2.jar"));
+
+					temp_libs.add(new Library("org.apache.logging.log4j:log4j-api:2.11.2", 
+						"org/apache/logging/log4j/log4j-api/2.11.2/log4j-api-2.11.2.jar",
+						"https://files.minecraftforge.net/maven/org/apache/logging/log4j/log4j-api/2.11.2/log4j-api-2.11.2.jar"));
+
+					temp_libs.add(new Library("org.apache.logging.log4j:log4j-core:2.11.2", 
+						"org/apache/logging/log4j/log4j-core/2.11.2/log4j-core-2.11.2.jar",
+						"https://files.minecraftforge.net/maven/org/apache/logging/log4j/log4j-core/2.11.2/log4j-core-2.11.2.jar"));
+
+					temp_libs.add(new Library("net.minecrell:terminalconsoleappender:1.2.0", 
+						"net/minecrell/terminalconsoleappender/1.2.0/terminalconsoleappender-1.2.0.jar",
+						"https://files.minecraftforge.net/maven/net/minecrell/terminalconsoleappender/1.2.0/terminalconsoleappender-1.2.0.jar"));
+
+					temp_libs.add(new Library("net.sf.jopt-simple:jopt-simple:5.0.4", 
+						"net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar",
+						"https://files.minecraftforge.net/maven/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar"));
+				}
+				else
+				{
+					libraries = profile.getVersionInfo().getLibraries();
+				}
+
                 if (libraries != null) {
                     for (Library library : libraries) {
                         if (!version.getLibraries().contains(library)) {
@@ -181,16 +287,37 @@ public class PackageBuilder {
                 }
 
                 // Copy main class
-                String mainClass = profile.getVersionInfo().getMainClass();
+				String mainClass = null;
+				
+				if(profile.getVersionInfo() == null)
+				{
+					mainClass = "cpw.mods.modlauncher.Launcher";
+				}
+				else
+				{
+					mainClass = profile.getVersionInfo().getMainClass();
+				}
                 if (mainClass != null) {
                     version.setMainClass(mainClass);
                     log.info("Using " + mainClass + " as the main class");
                 }
 
-                // Extract the library
-                String filePath = profile.getInstallData().getFilePath();
-                String libraryPath = profile.getInstallData().getPath();
+				String filePath = null;
+				String libraryPath = null;
+				
+				if(profile.getInstallData() == null)
+				{
+					filePath = "forge-1.14.4-28.2.0-universal.jar";
+					libraryPath = "net.minecraftforge:forge:1.14.4-28.2.0";
+				}
+				else
+				{
+					// Extract the library
+					filePath = profile.getInstallData().getFilePath();
+					libraryPath = profile.getInstallData().getPath();
+				}
 
+				
                 if (filePath != null && libraryPath != null) {
                     ZipEntry libraryEntry = BuilderUtils.getZipEntry(jarFile, filePath);
 

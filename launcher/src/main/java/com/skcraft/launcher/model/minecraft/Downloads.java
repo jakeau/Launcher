@@ -12,6 +12,14 @@ import java.util.HashMap;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Downloads {
 
-    private Artifact artifact;
-    private HashMap<String, Artifact> classifiers;
+    protected Artifact artifact;
+    protected HashMap<String, Artifact> classifiers;
+	
+	protected Downloads(){};
+	
+	protected Downloads(String path, String url)
+	{
+		artifact = new Artifact(path, url);
+	};
+
 }

@@ -39,6 +39,20 @@ public class Library {
     // Custom
     private boolean locallyAvailable;
 
+	public Library(){};
+	
+	public Library(String name, String path, String url)
+	{
+		setName(name);
+		setDownload(path, url);
+	}
+	
+	public void setDownload(String path, String url)
+	{
+		downloads = new Downloads(path, url);
+		
+	}
+
     public void setName(String name) {
         this.name = name;
 
